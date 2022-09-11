@@ -6,8 +6,8 @@ export class GroupsController {
   constructor(private readonly groupsService: GroupsService) {}
 
   @Post()
-  create(@Body() req: {name: string}) {
-    return this.groupsService.create(req.name);
+  create(@Body() req: {name: string, persons: []}) {
+    return this.groupsService.create(req.name, req.persons);
   }
 
   @Get()

@@ -13,58 +13,70 @@ export class GroupsService {
     private readonly personRepository: Repository<Person>
   ) {}
 
-  create(name: string) {
-    const group = this.groupRepository.save({name: name});
+  async create(name: string, persons) {
+    let group = new Group()
+    group.name = name
+    group.persons = []
+
+    if (persons.length > 0){
+      for(let i in persons){
+        let person = await this.personRepository.findOneBy({id: parseInt(persons[i])})
+        if (person)
+          group.persons.push(person)
+      }
+    }
+
+    group = await this.groupRepository.save(group);
     return group;
   }
 
-  findAll() {
-    return this.groupRepository
+  async findAll() {
+    return await this.groupRepository
     .createQueryBuilder('groups')
     .leftJoinAndSelect('groups.persons', 'persons')
     .getMany();
   }
 
-  findOne(id: number) {
-    return this.groupRepository
+  async findOne(id: number) {
+    return await this.groupRepository
     .createQueryBuilder('groups')
     .where("groups.id = :id", {id})
     .leftJoinAndSelect('groups.persons', 'persons')
     .getOne()
   }
 
-  update(id: number, name: string, persons) {
-    const group = this.groupRepository
+  async update(id: number, name: string, persons) {
+    const group = await this.groupRepository
     .createQueryBuilder('groups')
     .where("groups.id = :id", {id})
     .leftJoinAndSelect('groups.persons', 'persons')
     .getOne()
 
+    if (name){
+      group.name = name
+    }
+
     if (group){
-      let personsIds = []
 
       if (persons.length > 0){
+        group.persons = []
         for(let i in persons){
-          let person = this.personRepository.findOneBy({id: parseInt(persons[i])})
-          if (!person){
-            continue
-          }
-          personsIds.push(persons[i])
-        } 
-      
+          let person = await this.personRepository.findOneBy({id: parseInt(persons[i])})
+          if (person)
+            group.persons.push(person)
+        }
       }
-
-      const updatedGroup = this.groupRepository.update({id: id}, {name: name, persons: personsIds})
+      const updatedGroup = await this.groupRepository.save(group)
       return updatedGroup
     }
     else {
-      return
+      return id
     }
 
   }
 
-  remove(id: number) {
-    const group = this.groupRepository.findOneBy({
+  async remove(id: number) {
+    const group = await this.groupRepository.findOneBy({
       id: id
     })
 
@@ -72,7 +84,7 @@ export class GroupsService {
       return id
     }
 
-    this.groupRepository.delete(id)
+    await this.groupRepository.remove(group)
     return id
   }
 }
