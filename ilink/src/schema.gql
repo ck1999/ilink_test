@@ -1,0 +1,64 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input ArgsPersonInput {
+  id: ID!
+}
+
+input CreateGroupInput {
+  name: String!
+  persons: [ArgsPersonInput!]
+}
+
+input CreatePersonInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Group {
+  createdAt: DateTime!
+  id: ID!
+  name: String!
+  persons: [Person!]!
+  updatedAt: DateTime!
+}
+
+type Mutation {
+  createGroup(createGroupInput: CreateGroupInput!): Group!
+  createPerson(createPersonInput: CreatePersonInput!): Person!
+  removeGroup(id: Int!): Group!
+  removePerson(id: Int!): Person!
+  updateGroup(updateGroupInput: UpdateGroupInput!): Group!
+  updatePerson(updatePersonInput: UpdatePersonInput!): Person!
+}
+
+type Person {
+  createdAt: DateTime!
+  id: ID!
+  name: String!
+  updatedAt: DateTime!
+}
+
+type Query {
+  group(id: Int!): Group!
+  person(id: Int!): Person!
+}
+
+input UpdateGroupInput {
+  id: ID!
+  name: String
+  persons: [ArgsPersonInput!]
+  users: [ArgsPersonInput!]
+}
+
+input UpdatePersonInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}

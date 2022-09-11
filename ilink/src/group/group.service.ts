@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Person } from 'src/persons/entities/person.entity';
+import { Person } from 'src/person/entities/person.entity';
 import { Repository } from 'typeorm';
+import { CreateGroupInput } from './dto/create-group.input';
+import { UpdateGroupInput } from './dto/update-group.input';
 import { Group } from './entities/group.entity';
 
 @Injectable()
-export class GroupsService {
+export class GroupService {
   constructor(
     @InjectRepository(Group)
     private readonly groupRepository: Repository<Group>,
@@ -13,14 +15,14 @@ export class GroupsService {
     private readonly personRepository: Repository<Person>
   ) {}
 
-  async create(name: string, persons) {
+  async create(createGroupInput: CreateGroupInput) {
     let group = new Group()
-    group.name = name
+    group.name = createGroupInput.name
     group.persons = []
 
-    if (persons.length > 0){
-      for(let i in persons){
-        let person = await this.personRepository.findOneBy({id: parseInt(persons[i])})
+    if (createGroupInput.persons.length > 0){
+      for(let i in createGroupInput.persons){
+        let person = await this.personRepository.findOneBy({id: parseInt(createGroupInput.persons[i].id)})
         if (person)
           group.persons.push(person)
       }
@@ -45,23 +47,23 @@ export class GroupsService {
     .getOne()
   }
 
-  async update(id: number, name: string, persons) {
+  async update(id: number, updateGroupInput: UpdateGroupInput) {
     const group = await this.groupRepository
     .createQueryBuilder('groups')
     .where("groups.id = :id", {id})
     .leftJoinAndSelect('groups.persons', 'persons')
     .getOne()
 
-    if (name){
-      group.name = name
+    if (updateGroupInput.name){
+      group.name = updateGroupInput.name
     }
 
     if (group){
 
-      if (persons.length > 0){
+      if (updateGroupInput.persons.length > 0){
         group.persons = []
-        for(let i in persons){
-          let person = await this.personRepository.findOneBy({id: parseInt(persons[i])})
+        for(let i in updateGroupInput.persons){
+          let person = await this.personRepository.findOneBy({id: parseInt(updateGroupInput.persons[i].id)})
           if (person)
             group.persons.push(person)
         }
