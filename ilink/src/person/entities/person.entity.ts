@@ -13,6 +13,10 @@ export class Person {
     @Column({ length: 30})
     name: string
 
+    @Field(() => String, {nullable: false})
+    @Column({ length: 30})
+    surname: string
+
     @Field(() => Date)
     @CreateDateColumn({type: 'timestamptz', name: 'created_at', default: () => 'CURRENT_TIMESTAMP'})
     createdAt: Date;

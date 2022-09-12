@@ -1,7 +1,14 @@
-import { InputType, Int, Field } from '@nestjs/graphql';
+import { InputType, Field } from '@nestjs/graphql';
+import { ArgsGroupInput } from 'src/group/dto/id-group.input';
 
 @InputType()
 export class CreatePersonInput {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number;
+  @Field({nullable: false})
+  name: string;
+
+  @Field({nullable: false})
+  surname: string;
+
+  @Field(() => [ArgsGroupInput], {nullable: true})
+  groups: ArgsGroupInput[]
 }

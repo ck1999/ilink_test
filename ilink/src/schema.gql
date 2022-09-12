@@ -2,6 +2,10 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input ArgsGroupInput {
+  id: ID!
+}
+
 input ArgsPersonInput {
   id: ID!
 }
@@ -12,8 +16,9 @@ input CreateGroupInput {
 }
 
 input CreatePersonInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  groups: [ArgsGroupInput!]
+  name: String!
+  surname: String!
 }
 
 """
@@ -42,6 +47,7 @@ type Person {
   createdAt: DateTime!
   id: ID!
   name: String!
+  surname: String!
   updatedAt: DateTime!
 }
 
@@ -58,7 +64,9 @@ input UpdateGroupInput {
 }
 
 input UpdatePersonInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  groups: [ArgsGroupInput!]
   id: Int!
+  name: String
+  persons: [ArgsGroupInput!]
+  surname: String
 }
