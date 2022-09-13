@@ -1,6 +1,6 @@
 import { CreatePersonInput } from './create-person.input';
 import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
-import { ArgsGroupInput } from 'src/group/dto/id-group.input';
+import { ArgsGroupInput } from '../../group/dto/id-group.input';
 
 @InputType()
 export class UpdatePersonInput extends PartialType(CreatePersonInput) {

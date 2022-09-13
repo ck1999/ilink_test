@@ -1,5 +1,6 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { Group } from 'src/group/entities/group.entity';
+import { Group } from '../../group/entities/group.entity'
+
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToMany, JoinTable } from 'typeorm';
 
 @ObjectType()

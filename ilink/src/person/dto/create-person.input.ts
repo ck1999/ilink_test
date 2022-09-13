@@ -1,5 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { ArgsGroupInput } from 'src/group/dto/id-group.input';
+import { ArgsGroupInput } from '../../group/dto/id-group.input';
 
 @InputType()
 export class CreatePersonInput {

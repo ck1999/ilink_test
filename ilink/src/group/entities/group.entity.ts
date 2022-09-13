@@ -1,6 +1,6 @@
-import { Person } from "src/person/entities/person.entity";
+import { Person } from "../../person/entities/person.entity";
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, ManyToMany } from "typeorm";
-import { ObjectType, Field, Int, ID } from '@nestjs/graphql';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 
 @ObjectType()
 @Entity({ name: 'Group' })

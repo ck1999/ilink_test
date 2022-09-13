@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Person } from 'src/person/entities/person.entity';
+import { Person } from '../person/entities/person.entity';
 import { Repository } from 'typeorm';
 import { CreateGroupInput } from './dto/create-group.input';
 import { UpdateGroupInput } from './dto/update-group.input';
