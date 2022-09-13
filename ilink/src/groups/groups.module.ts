@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { GroupsService } from './groups.service';
 import { GroupsController } from './groups.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Person } from 'src/persons/entities/person.entity';
+import { Person } from '../persons/entities/person.entity';
 import { Group } from './entities/group.entity';
 
 @Module({

@@ -1,4 +1,4 @@
-import { Group } from "src/groups/entities/group.entity";
+import { Group } from "../../groups/entities/group.entity";
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable } from "typeorm";
 
 @Entity({ name: 'Person' })
