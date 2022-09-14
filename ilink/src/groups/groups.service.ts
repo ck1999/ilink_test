@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Person } from '../persons/entities/person.entity';
 import { Repository } from 'typeorm';
@@ -13,14 +13,14 @@ export class GroupsService {
     private readonly personRepository: Repository<Person>
   ) {}
 
-  async create(name: string, persons) {
+  async create(name: string, persons: [number]): Promise<Group> {
     let group = new Group()
     group.name = name
     group.persons = []
 
     if (persons.length > 0){
       for(let i in persons){
-        let person = await this.personRepository.findOneBy({id: parseInt(persons[i])})
+        let person = await this.personRepository.findOneBy({id: persons[i]})
         if (person)
           group.persons.push(person)
       }
@@ -30,14 +30,14 @@ export class GroupsService {
     return group;
   }
 
-  async findAll() {
+  async findAll(): Promise<Group[]> {
     return await this.groupRepository
     .createQueryBuilder('groups')
     .leftJoinAndSelect('groups.persons', 'persons')
     .getMany();
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<Group> {
     return await this.groupRepository
     .createQueryBuilder('groups')
     .where("groups.id = :id", {id})
@@ -45,7 +45,7 @@ export class GroupsService {
     .getOne()
   }
 
-  async update(id: number, name: string, persons) {
+  async update(id: number, name: string, persons: [number]): Promise<Group> {
     const group = await this.groupRepository
     .createQueryBuilder('groups')
     .where("groups.id = :id", {id})
@@ -61,7 +61,7 @@ export class GroupsService {
       if (persons.length > 0){
         group.persons = []
         for(let i in persons){
-          let person = await this.personRepository.findOneBy({id: parseInt(persons[i])})
+          let person = await this.personRepository.findOneBy({id: persons[i]})
           if (person)
             group.persons.push(person)
         }
@@ -70,12 +70,12 @@ export class GroupsService {
       return updatedGroup
     }
     else {
-      return id
+      throw new HttpException('Not Found', 404) //Http Code. Informationen im Telegramm
     }
 
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<number> {
     const group = await this.groupRepository.findOneBy({
       id: id
     })
@@ -84,7 +84,7 @@ export class GroupsService {
       return id
     }
 
-    await this.groupRepository.remove(group)
+    await this.groupRepository.softRemove(group)
     return id
   }
 }

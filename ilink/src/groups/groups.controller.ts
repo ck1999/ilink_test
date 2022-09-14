@@ -6,7 +6,7 @@ export class GroupsController {
   constructor(private readonly groupsService: GroupsService) {}
 
   @Post()
-  create(@Body() req: {name: string, persons: []}) {
+  create(@Body() req: {name: string, persons: [number]}) {
     return this.groupsService.create(req.name, req.persons);
   }
 
@@ -21,7 +21,7 @@ export class GroupsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: number, @Body() req: {name: string, persons: []}) {
+  update(@Param('id') id: number, @Body() req: {name: string, persons: [number]}) {
     return this.groupsService.update(id, req.name, req.persons);
   }
 

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Group } from '../groups/entities/group.entity';
 import { Repository } from 'typeorm';
@@ -13,7 +13,7 @@ export class PersonsService {
     private readonly groupRepository: Repository<Group>
   ) {}
 
-  async create(name: string, surname: string, groups) {
+  async create(name: string, surname: string, groups: [number]): Promise<Person>  {
     let person = new Person()
     person.name = name
     person.surname = surname
@@ -21,7 +21,7 @@ export class PersonsService {
     if (groups.length > 0){
       person.groups = []
       for(let i in groups){
-        let group = await this.groupRepository.findOneBy({id: parseInt(groups[i])})
+        let group = await this.groupRepository.findOneBy({id: groups[i]})
         if (group)
           person.groups.push(group)
       }
@@ -30,21 +30,21 @@ export class PersonsService {
       person.groups = []
     }
 
-    person = await this.groupRepository.save(person);
+    person = await this.personRepository.save(person);
     return person;
   }
 
-  async findAll() {
+  async findAll(): Promise<Person[]> {
     return await this.personRepository.find();
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<Person> {
     return await this.personRepository.findOneBy({
       id: id,
     });
   }
 
-  async update(id: number, name: string, surname: string, groups) {
+  async update(id: number, name: string, surname: string, groups: [number]): Promise<Person> {
     const person = await this.personRepository.findOneBy({
       id: id
     })
@@ -56,22 +56,22 @@ export class PersonsService {
       if (groups.length > 0){
         person.groups = []
         for(let i in groups){
-          let group = await this.groupRepository.findOneBy({id: parseInt(groups[i])})
+          let group = await this.groupRepository.findOneBy({id: groups[i]})
           if (group)
             person.groups.push(group)
         }
       }
 
       const updatedPerson = await this.personRepository.save(person);
-      return updatedPerson;
+      return updatedPerson; //HTTP Code, not entity
     }
     else {
-      return id
+      throw new HttpException('Not Found', 404)
     }
 
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<number> {
     const person = await this.personRepository.findOneBy({
       id: id
     })
@@ -80,7 +80,7 @@ export class PersonsService {
       return id
     }
 
-    await this.personRepository.delete(id)
+    await this.personRepository.softRemove(person)
     return id
   }
 }

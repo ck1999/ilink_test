@@ -1,5 +1,5 @@
 import { Person } from "../../persons/entities/person.entity";
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable, DeleteDateColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'Group' })
 export class Group {
@@ -12,8 +12,11 @@ export class Group {
     @CreateDateColumn({type: 'timestamptz', name: 'created_at', default: () => 'CURRENT_TIMESTAMP'})
     createdAt: Date;
 
-    @CreateDateColumn({type: 'timestamptz', name: 'updated_at', default: () => 'CURRENT_TIMESTAMP'})
+    @UpdateDateColumn({type: 'timestamptz', name: 'updated_at'})
     updatedAt: Date;
+
+    @DeleteDateColumn({type: 'timestamptz', name: 'deleted_at'})
+    deletedAt: Date;
 
     @ManyToMany(() => Person, (person) => person.groups)
     persons: Person[]
