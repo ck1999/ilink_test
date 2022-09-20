@@ -28,6 +28,7 @@ scalar DateTime
 
 type Group {
   createdAt: DateTime!
+  deletedAt: DateTime!
   id: ID!
   name: String!
   persons: [Person!]!
@@ -45,6 +46,7 @@ type Mutation {
 
 type Person {
   createdAt: DateTime!
+  deletedAt: DateTime!
   id: ID!
   name: String!
   surname: String!

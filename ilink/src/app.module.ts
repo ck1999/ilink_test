@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { GroupModule } from './group/group.module';
 import { PersonModule } from './person/person.module';
@@ -33,8 +31,6 @@ import { Group } from './group/entities/group.entity';
         }),
         GroupModule,
         PersonModule,
-    ],
-    controllers: [AppController],
-    providers: [AppService],
+    ]
 })
 export class AppModule {}

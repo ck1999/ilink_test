@@ -1,7 +1,7 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Group } from '../../group/entities/group.entity'
 
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToMany, JoinTable, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
 
 @ObjectType()
 @Entity({ name: 'Person' })
@@ -23,8 +23,12 @@ export class Person {
     createdAt: Date;
 
     @Field(() => Date)
-    @CreateDateColumn({type: 'timestamptz', name: 'updated_at', default: () => 'CURRENT_TIMESTAMP'})
+    @UpdateDateColumn({type: 'timestamptz', name: 'updated_at', default: () => 'CURRENT_TIMESTAMP'})
     updatedAt: Date;
+
+    @Field(() => Date)
+    @DeleteDateColumn({type: 'timestamptz', name: 'deleted_at'})
+    deletedAt: Date;
 
     @ManyToMany(() => Group, (group) => group.persons, {
       eager: true,

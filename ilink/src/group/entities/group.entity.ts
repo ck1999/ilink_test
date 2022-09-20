@@ -1,5 +1,5 @@
 import { Person } from "../../person/entities/person.entity";
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, ManyToMany } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, ManyToMany, UpdateDateColumn, DeleteDateColumn } from "typeorm";
 import { ObjectType, Field, ID } from '@nestjs/graphql';
 
 @ObjectType()
@@ -18,8 +18,12 @@ export class Group {
     createdAt: Date;
 
     @Field(() => Date)
-    @CreateDateColumn({type: 'timestamptz', name: 'updated_at', default: () => 'CURRENT_TIMESTAMP'})
+    @UpdateDateColumn({type: 'timestamptz', name: 'updated_at', default: () => 'CURRENT_TIMESTAMP'})
     updatedAt: Date;
+
+    @Field(() => Date)
+    @DeleteDateColumn({type: 'timestamptz', name: 'deleted_at'})
+    deletedAt: Date;
 
     @Field(() => [Person])
     @ManyToMany(() => Person, (person) => person.groups)

@@ -15,7 +15,7 @@ export class PersonService {
     private readonly groupRepository: Repository<Group>
   ) {}
 
-  async create(createPersonInput: CreatePersonInput) {
+  async create(createPersonInput: CreatePersonInput): Promise<Person> {
     let person = new Person()
     person.name = createPersonInput.name
     person.surname = createPersonInput.surname
@@ -32,21 +32,20 @@ export class PersonService {
       person.groups = []
     }
 
-    person = await this.personRepository.save(person);
-    return person;
+    return await this.personRepository.save(person);
   }
 
-  async findAll() {
+  async findAll(): Promise<Person[]> {
     return await this.personRepository.find();
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<Person> {
     return await this.personRepository.findOneBy({
       id: id,
     });
   }
 
-  async update(id: number, updatePersonInput: UpdatePersonInput) {
+  async update(id: number, updatePersonInput: UpdatePersonInput): Promise<Person> {
     const person = await this.personRepository.findOneBy({
       id: id
     })
@@ -64,25 +63,19 @@ export class PersonService {
         }
       }
 
-      const updatedPerson = await this.personRepository.save(person);
-      return updatedPerson;
-    }
-    else {
-      return id
+      return await this.personRepository.save(person);
     }
 
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<Person> {
     const person = await this.personRepository.findOneBy({
       id: id
     })
 
-    if (!person){
-      return id
+    if (person){
+      return await this.personRepository.softRemove(person)
     }
-
-    await this.personRepository.delete(id)
-    return id
+    
   }
 }

@@ -15,7 +15,7 @@ export class GroupService {
     private readonly personRepository: Repository<Person>
   ) {}
 
-  async create(createGroupInput: CreateGroupInput) {
+  async create(createGroupInput: CreateGroupInput): Promise<Group> {
     let group = new Group()
     group.name = createGroupInput.name
     group.persons = []
@@ -28,18 +28,17 @@ export class GroupService {
       }
     }
 
-    group = await this.groupRepository.save(group);
-    return group;
+    return await this.groupRepository.save(group);
   }
 
-  async findAll() {
+  async findAll(): Promise<Group[]> {
     return await this.groupRepository
     .createQueryBuilder('groups')
     .leftJoinAndSelect('groups.persons', 'persons')
     .getMany();
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<Group> {
     return await this.groupRepository
     .createQueryBuilder('groups')
     .where("groups.id = :id", {id})
@@ -47,18 +46,18 @@ export class GroupService {
     .getOne()
   }
 
-  async update(id: number, updateGroupInput: UpdateGroupInput) {
+  async update(id: number, updateGroupInput: UpdateGroupInput): Promise<Group> {
     const group = await this.groupRepository
     .createQueryBuilder('groups')
     .where("groups.id = :id", {id})
     .leftJoinAndSelect('groups.persons', 'persons')
     .getOne()
 
-    if (updateGroupInput.name){
-      group.name = updateGroupInput.name
-    }
-
     if (group){
+
+      if (updateGroupInput.name){
+        group.name = updateGroupInput.name
+      }
 
       if (updateGroupInput.persons.length > 0){
         group.persons = []
@@ -68,25 +67,19 @@ export class GroupService {
             group.persons.push(person)
         }
       }
-      const updatedGroup = await this.groupRepository.save(group)
-      return updatedGroup
-    }
-    else {
-      return id
+      return await this.groupRepository.save(group)
     }
 
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<Group> {
     const group = await this.groupRepository.findOneBy({
       id: id
     })
 
-    if (!group){
-      return id
+    if (group){
+      return await this.groupRepository.softRemove(group)
     }
-
-    await this.groupRepository.remove(group)
-    return id
+    
   }
 }
