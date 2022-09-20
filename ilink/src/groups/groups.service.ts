@@ -26,8 +26,7 @@ export class GroupsService {
       }
     }
 
-    group = await this.groupRepository.save(group);
-    return group;
+    return await this.groupRepository.save(group);
   }
 
   async findAll(): Promise<Group[]> {
@@ -66,8 +65,7 @@ export class GroupsService {
             group.persons.push(person)
         }
       }
-      const updatedGroup = await this.groupRepository.save(group)
-      return updatedGroup
+      return await this.groupRepository.save(group)
     }
     else {
       throw new HttpException('Not Found', 404) //Http Code. Informationen im Telegramm
@@ -75,16 +73,15 @@ export class GroupsService {
 
   }
 
-  async remove(id: number): Promise<number> {
+  async remove(id: number): Promise<Group> {
     const group = await this.groupRepository.findOneBy({
       id: id
     })
 
     if (!group){
-      return id
+      throw new HttpException('Not Found', 404)
     }
 
-    await this.groupRepository.softRemove(group)
-    return id
+    return await this.groupRepository.softRemove(group)
   }
 }

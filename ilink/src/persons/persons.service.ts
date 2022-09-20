@@ -30,8 +30,7 @@ export class PersonsService {
       person.groups = []
     }
 
-    person = await this.personRepository.save(person);
-    return person;
+    return await this.personRepository.save(person);
   }
 
   async findAll(): Promise<Person[]> {
@@ -62,8 +61,7 @@ export class PersonsService {
         }
       }
 
-      const updatedPerson = await this.personRepository.save(person);
-      return updatedPerson; //HTTP Code, not entity
+      return await this.personRepository.save(person);
     }
     else {
       throw new HttpException('Not Found', 404)
@@ -71,16 +69,15 @@ export class PersonsService {
 
   }
 
-  async remove(id: number): Promise<number> {
+  async remove(id: number): Promise<Person> {
     const person = await this.personRepository.findOneBy({
       id: id
     })
 
     if (!person){
-      return id
+      throw new HttpException('Not Found', 404)
     }
 
-    await this.personRepository.softRemove(person)
-    return id
+    return await this.personRepository.softRemove(person)
   }
 }
