@@ -3,25 +3,30 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Group } from '../groups/entities/group.entity';
 import { Repository } from 'typeorm';
 import { Person } from './entities/person.entity';
+import { RMQRoute } from 'nestjs-rmq';
+
 
 @Injectable()
 export class PersonsService {
   constructor(
+    
     @InjectRepository(Person)
     private readonly personRepository: Repository<Person>,
     @InjectRepository(Group)
-    private readonly groupRepository: Repository<Group>
+    private readonly groupRepository: Repository<Group>,
+    
   ) {}
 
-  async create(name: string, surname: string, groups: [number]): Promise<Person>  {
+  @RMQRoute('person.create')
+  async create(req: {name: string, surname: string, groups: [number]}): Promise<Person>  {
     let person = new Person()
-    person.name = name
-    person.surname = surname
+    person.name = req.name
+    person.surname = req.surname
 
-    if (groups.length > 0){
+    if (req.groups.length > 0){
       person.groups = []
-      for(let i in groups){
-        let group = await this.groupRepository.findOneBy({id: groups[i]})
+      for(let i in req.groups){
+        let group = await this.groupRepository.findOneBy({id: req.groups[i]})
         if (group)
           person.groups.push(group)
       }
@@ -30,13 +35,15 @@ export class PersonsService {
       person.groups = []
     }
 
-    return await this.personRepository.save(person);
+    return await this.personRepository.save(person)
   }
 
+  @RMQRoute('person.all')
   async findAll(): Promise<Person[]> {
     return await this.personRepository.find();
   }
 
+  @RMQRoute('person.get')
   async findOne(id: number): Promise<Person> {
     return await this.personRepository.findOneBy({
       id: id,
@@ -69,6 +76,7 @@ export class PersonsService {
 
   }
 
+  @RMQRoute('person.remove')
   async remove(id: number): Promise<Person> {
     const person = await this.personRepository.findOneBy({
       id: id
