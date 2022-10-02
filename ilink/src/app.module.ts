@@ -14,7 +14,7 @@ import { Group } from './groups/entities/group.entity';
             password: 'root',
             database: 'test',
             host: 'localhost',
-            synchronize: true,
+            synchronize: false,
             entities: [
                 Person,
                 Group

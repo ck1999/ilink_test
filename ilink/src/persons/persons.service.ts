@@ -30,17 +30,35 @@ export class PersonsService {
       person.groups = []
     }
 
-    return await this.personRepository.save(person);
+    try {
+      return await this.personRepository.save(person);
+    }
+    catch (error) {
+      console.log(error) 
+      throw new HttpException('Internal Server Error', 500) 
+    }
   }
 
   async findAll(): Promise<Person[]> {
-    return await this.personRepository.find();
+    try {
+      return await this.personRepository.find();
+    }
+    catch (error) {
+      console.log(error) 
+      throw new HttpException('Internal Server Error', 500) 
+    }
   }
 
   async findOne(id: number): Promise<Person> {
-    return await this.personRepository.findOneBy({
-      id: id,
-    });
+    try {
+      return await this.personRepository.findOneBy({
+        id: id,
+      });
+    }
+    catch (error) {
+      console.log(error) 
+      throw new HttpException('Internal Server Error', 500) 
+    }
   }
 
   async update(id: number, name: string, surname: string, groups: [number]): Promise<Person> {
@@ -61,7 +79,13 @@ export class PersonsService {
         }
       }
 
-      return await this.personRepository.save(person);
+      try {
+        return await this.personRepository.save(person);
+      }
+      catch (error) {
+        console.log(error) 
+        throw new HttpException('Internal Server Error', 500) 
+      }
     }
     else {
       throw new HttpException('Not Found', 404)
@@ -78,6 +102,12 @@ export class PersonsService {
       throw new HttpException('Not Found', 404)
     }
 
-    return await this.personRepository.softRemove(person)
+    try {
+      return await this.personRepository.softRemove(person)
+    }
+    catch (error) {
+      console.log(error) 
+      throw new HttpException('Internal Server Error', 500) 
+    }
   }
 }
