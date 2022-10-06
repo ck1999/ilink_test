@@ -9,7 +9,9 @@ export class PersonResolver {
   constructor(private readonly personService: PersonService) {}
 
   @Mutation(() => Person)
-  createPerson(@Args('createPersonInput') createPersonInput: CreatePersonInput) {
+  createPerson(
+    @Args('createPersonInput') createPersonInput: CreatePersonInput,
+  ) {
     return this.personService.create(createPersonInput);
   }
 
@@ -24,7 +26,9 @@ export class PersonResolver {
   }
 
   @Mutation(() => Person)
-  updatePerson(@Args('updatePersonInput') updatePersonInput: UpdatePersonInput) {
+  updatePerson(
+    @Args('updatePersonInput') updatePersonInput: UpdatePersonInput,
+  ) {
     return this.personService.update(updatePersonInput.id, updatePersonInput);
   }
 

@@ -3,9 +3,9 @@ import { ArgsPersonInput } from '../../person/dto/id-person.input';
 
 @InputType()
 export class CreateGroupInput {
-  @Field({nullable: false})
+  @Field({ nullable: false })
   name: string;
 
-  @Field(() => [ArgsPersonInput], {nullable: true})
-  persons: ArgsPersonInput[]
+  @Field(() => [ArgsPersonInput], { nullable: true })
+  persons: ArgsPersonInput[];
 }

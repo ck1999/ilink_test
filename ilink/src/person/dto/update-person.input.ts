@@ -7,12 +7,12 @@ export class UpdatePersonInput extends PartialType(CreatePersonInput) {
   @Field(() => Int)
   id: number;
 
-  @Field({nullable: true})
+  @Field({ nullable: true })
   name: string;
 
-  @Field({nullable: true})
-  surname: string
+  @Field({ nullable: true })
+  surname: string;
 
-  @Field(() => [ArgsGroupInput], {nullable: true})
-  persons: ArgsGroupInput[]
+  @Field(() => [ArgsGroupInput], { nullable: true })
+  persons: ArgsGroupInput[];
 }

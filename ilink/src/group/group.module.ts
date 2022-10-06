@@ -3,7 +3,7 @@ import { GroupService } from './group.service';
 import { GroupResolver } from './group.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Group } from './entities/group.entity';
-import { Person } from '../person/entities/person.entity'
+import { Person } from '../person/entities/person.entity';
 
 @Module({
   imports: [
@@ -11,6 +11,6 @@ import { Person } from '../person/entities/person.entity'
     TypeOrmModule.forFeature([Person]),
   ],
   providers: [GroupResolver, GroupService],
-  exports: [GroupService]
+  exports: [GroupService],
 })
 export class GroupModule {}
