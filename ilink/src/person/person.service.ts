@@ -21,13 +21,15 @@ export class PersonService {
       person.name = createPersonInput.name;
       person.surname = createPersonInput.surname;
 
-      if (createPersonInput.groups.length > 0) {
-        person.groups = [];
-        for (const i in createPersonInput.groups) {
-          const group = await this.groupRepository.findOneBy({
-            id: parseInt(createPersonInput.groups[i].id),
-          });
-          if (group) person.groups.push(group);
+      if (createPersonInput.groups){
+        if (createPersonInput.groups.length > 0) {
+          person.groups = [];
+          for (const i in createPersonInput.groups) {
+            const group = await this.groupRepository.findOneBy({
+              id: parseInt(createPersonInput.groups[i].id),
+            });
+            if (group) person.groups.push(group);
+          }
         }
       } else {
         person.groups = [];
@@ -74,13 +76,15 @@ export class PersonService {
           person.surname = updatePersonInput.surname;
         }
 
-        if (updatePersonInput.groups.length > 0) {
-          person.groups = [];
-          for (const i in updatePersonInput.groups) {
-            const group = await this.groupRepository.findOneBy({
-              id: parseInt(updatePersonInput.groups[i].id),
-            });
-            if (group) person.groups.push(group);
+        if (updatePersonInput.groups){
+          if (updatePersonInput.groups.length > 0) {
+            person.groups = [];
+            for (const i in updatePersonInput.groups) {
+              const group = await this.groupRepository.findOneBy({
+                id: parseInt(updatePersonInput.groups[i].id),
+              });
+              if (group) person.groups.push(group);
+            }
           }
         }
 

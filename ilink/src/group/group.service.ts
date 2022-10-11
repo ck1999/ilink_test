@@ -21,12 +21,14 @@ export class GroupService {
       group.name = createGroupInput.name;
       group.persons = [];
 
-      if (createGroupInput.persons.length > 0) {
-        for (const i in createGroupInput.persons) {
-          const person = await this.personRepository.findOneBy({
-            id: parseInt(createGroupInput.persons[i].id),
-          });
-          if (person) group.persons.push(person);
+      if (createGroupInput.persons){
+        if (createGroupInput.persons.length > 0) {
+          for (const i in createGroupInput.persons) {
+            const person = await this.personRepository.findOneBy({
+              id: parseInt(createGroupInput.persons[i].id),
+            });
+            if (person) group.persons.push(person);
+          }
         }
       }
 
@@ -72,15 +74,18 @@ export class GroupService {
           group.name = updateGroupInput.name;
         }
 
-        if (updateGroupInput.persons.length > 0) {
-          group.persons = [];
-          for (const i in updateGroupInput.persons) {
-            const person = await this.personRepository.findOneBy({
-              id: parseInt(updateGroupInput.persons[i].id),
-            });
-            if (person) group.persons.push(person);
+        if (updateGroupInput.persons){
+          if (updateGroupInput.persons.length > 0) {
+            group.persons = [];
+            for (const i in updateGroupInput.persons) {
+              const person = await this.personRepository.findOneBy({
+                id: parseInt(updateGroupInput.persons[i].id),
+              });
+              if (person) group.persons.push(person);
+            }
           }
         }
+
         return await this.groupRepository.save(group);
       }
     } catch (error) {
