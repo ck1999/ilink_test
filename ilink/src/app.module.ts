@@ -6,6 +6,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Person } from './person/entities/person.entity';
 import { Group } from './group/entities/group.entity';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -16,13 +17,16 @@ import { Group } from './group/entities/group.entity';
       playground: true,
       debug: true,
     }),
+    ConfigModule.forRoot({
+      envFilePath: ['.env']
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       port: 5432,
-      username: 'root',
-      password: 'root',
-      database: 'test',
-      host: 'localhost',
+      username: process.env.DATABASE_USER,
+      password: process.env.DATABASE_PASSWORD,
+      database: process.env.DATABASE_NAME,
+      host: process.env.DATABASE_HOST,
       synchronize: false,
       entities: [Person, Group],
     }),
